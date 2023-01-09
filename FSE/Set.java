@@ -6,7 +6,7 @@ class Set extends JPanel implements KeyListener, ActionListener, MouseListener {
 	private boolean[] keys;
 	Timer timer;
 	Image pic;
-Button [] b = new Button[10];
+Button [] b = new Button[20];
 	public Set() {
 		keys = new boolean[KeyEvent.KEY_LAST + 1];
 		setPreferredSize(new Dimension(1900, 1080));
@@ -17,9 +17,11 @@ Button [] b = new Button[10];
 		timer = new Timer(20, this);
 		timer.start();
 		pic = new ImageIcon("back.png").getImage();
-		for (int i=0; i<4;i++){
-		b[i]= new Button(40 ,140+(i*140), "idk");
-		b[i+4]= new Button(1300 ,140+(i*140), "idk");
+		for (int i=0; i<5;i++){
+		b[i]= new Button(40 ,130+(i*110), "idk",100,180);
+		b[i+5]= new Button(1300 ,130+(i*110), "idk",100,180);
+		b[i+10]= new Button(320+(i*180) ,750, "idk",70,150);
+
 
 		}
 	}
@@ -27,6 +29,7 @@ Button [] b = new Button[10];
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		repaint();
+		
 	}
 
 	@Override
@@ -52,6 +55,7 @@ Button [] b = new Button[10];
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
+		b[1].hover(e.getY(), e.getX());
 	}
 
 	@Override
@@ -87,9 +91,11 @@ Button [] b = new Button[10];
 		g.setColor(new Color(12, 32, 34));
 		g.setFont(new Font("Palace Script MT", Font.ITALIC, 100));
 		g.drawString("La Boutique", 600, 70);
-		for (int i=0; i<4;i++){
+		for (int i=0; i<5;i++){
 			b[i].draw(g);
-			b[i+4].draw(g);
+			b[i+5].draw(g);
+			b[i+10].draw(g);
+
 		}
 	}
 }

@@ -1,25 +1,40 @@
 
 import java.awt.*;
 import javax.swing.*;
+
 class Button extends JFrame {
-    int x,y;
+    int x, y, length, width;
     String name;
     Rectangle rect;
-    
-    
-public Button(int x1, int y1,String s){
-x=x1;
-y=y1;
-name =s;
-}
+    Boolean b;
+
+    public Button(int x1, int y1, String s, int l, int w) {
+        x = x1;
+        y = y1;
+        name = s;
+        length = l;
+        width = w;
+        rect = new Rectangle(x, y, width, length);
+    }
+
+    public void hover(int x, int y) {
+        Point p = new Point(x, y);
+        b= GTools.intersect(p, rect);
+    }
+
+    public void draw(Graphics g) {
+        if(b){
+        g.setColor(Color.BLUE);
+        } 
+        else{
+            g.setColor(Color.DARK_GRAY);
+        }
+        g.fillRect(x, y, width, length);
 
 
-public void draw (Graphics g){
-    g.setColor(Color.BLACK);
-    g.drawRect(x,y,180,100);
-    g.setFont(new Font(" Times New Roman", Font.BOLD, 50));
+        g.setFont(new Font(" Times New Roman", Font.BOLD, 50));
 
-    g.drawString(name , x+30, y+65);
-}
+        g.drawString(name, x + 30, y + 65);
+    }
 
 }
