@@ -74,6 +74,9 @@ class Set extends JPanel implements KeyListener, ActionListener, MouseListener {
 			if (b[14].hover(mx, my)) {
 Upload f= new Upload();
 			}
+			if(b[0].hover(mx,my)){
+				Brush p= new Brush(mx, my);
+			}
 		
 
 	}

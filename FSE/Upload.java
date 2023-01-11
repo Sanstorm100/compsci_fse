@@ -1,24 +1,21 @@
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileSystemView;
+import javax.swing.*;
 import java.io.*;
 
-import javax.swing.JFileChooser;
-import javax.swing.*;
 
 
 
 
-public class Upload  extends JFileChooser  {
-    JFileChooser fc = new JFileChooser();
+public class Upload  extends JFrame   {
+    JFileChooser fc = new JFileChooser(FileSystemView.getFileSystemView());
 
     public Upload(){
+        fc.showSaveDialog(null);
 
-        File file = fc.getSelectedFile();
-        int returnVal = fc.showOpenDialog(FileChooserDemo.this);
+    File f = new File("name"); 
 
-
-    File f = new File("FSE"); 
-
-	
-		if (f.mkdir() == true) { 
+	if (f.mkdir() == true) { 
 			System.out.println("Directory has been created successfully"); 
 		} 
 		else { 
