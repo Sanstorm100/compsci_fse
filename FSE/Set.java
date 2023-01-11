@@ -6,7 +6,9 @@ class Set extends JPanel implements KeyListener, ActionListener, MouseListener {
 	private boolean[] keys;
 	Timer timer;
 	Image pic;
-Button [] b = new Button[20];
+	private int mx, my;
+	Button[] b = new Button[20];
+
 	public Set() {
 		keys = new boolean[KeyEvent.KEY_LAST + 1];
 		setPreferredSize(new Dimension(1900, 1080));
@@ -17,11 +19,10 @@ Button [] b = new Button[20];
 		timer = new Timer(20, this);
 		timer.start();
 		pic = new ImageIcon("back.png").getImage();
-		for (int i=0; i<5;i++){
-		b[i]= new Button(40 ,130+(i*110), "idk",100,180);
-		b[i+5]= new Button(1300 ,130+(i*110), "idk",100,180);
-		b[i+10]= new Button(320+(i*180) ,750, "idk",70,150);
-
+		for (int i = 0; i < 5; i++) {
+			b[i] = new Button(40, 130 + (i * 110), "idk", 100, 180);
+			b[i + 5] = new Button(1300, 130 + (i * 110), "idk", 100, 180);
+			b[i + 10] = new Button(320 + (i * 180), 750, "idk", 70, 150);
 
 		}
 	}
@@ -29,7 +30,12 @@ Button [] b = new Button[20];
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		repaint();
-		
+		if (isShowing()) {
+			Point mouse = MouseInfo.getPointerInfo().getLocation();
+			Point offset = getLocationOnScreen();
+			mx = (mouse.x - offset.x);
+			my = (mouse.y - offset.y);
+		}
 	}
 
 	@Override
@@ -55,7 +61,7 @@ Button [] b = new Button[20];
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		b[1].hover(e.getY(), e.getX());
+
 	}
 
 	@Override
@@ -64,6 +70,12 @@ Button [] b = new Button[20];
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+	
+			if (b[14].hover(mx, my)) {
+Upload f= new Upload();
+			}
+		
+
 	}
 
 	@Override
@@ -73,6 +85,7 @@ Button [] b = new Button[20];
 	@Override
 	public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
+
 		BasicStroke thickPen = new BasicStroke(3);
 
 		g.drawImage(pic, 0, 0, null);
@@ -91,10 +104,14 @@ Button [] b = new Button[20];
 		g.setColor(new Color(12, 32, 34));
 		g.setFont(new Font("Palace Script MT", Font.ITALIC, 100));
 		g.drawString("La Boutique", 600, 70);
-		for (int i=0; i<5;i++){
-			b[i].draw(g);
-			b[i+5].draw(g);
-			b[i+10].draw(g);
+		for (int i = 0; i < 15; i++) {
+			if (b[i].hover(mx, my)) {
+				g.setColor(new Color(12, 32, 34));
+				b[i].draw(g);
+			} else {
+				g.setColor(new Color(90, 113, 137));
+				b[i].draw(g);
+			}
 
 		}
 	}
