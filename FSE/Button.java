@@ -19,7 +19,7 @@ class Button extends JFrame {
 
     public boolean hover(int x, int y) {
         Point p = new Point(x, y);
-       return GTools.intersect(p, rect);
+        return GTools.intersect(p, rect);
     }
 
     public void draw(Graphics g) {

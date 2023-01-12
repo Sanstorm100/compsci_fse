@@ -9,6 +9,8 @@ class Set extends JPanel implements KeyListener, ActionListener, MouseListener {
 	private int mx, my;
 	Button[] b = new Button[20];
 
+	Brush p;
+
 	public Set() {
 		keys = new boolean[KeyEvent.KEY_LAST + 1];
 		setPreferredSize(new Dimension(1900, 1080));
@@ -25,6 +27,7 @@ class Set extends JPanel implements KeyListener, ActionListener, MouseListener {
 			b[i + 10] = new Button(320 + (i * 180), 750, "idk", 70, 150);
 
 		}
+		p = new Brush(mx, my);
 	}
 
 	@Override
@@ -35,6 +38,11 @@ class Set extends JPanel implements KeyListener, ActionListener, MouseListener {
 			Point offset = getLocationOnScreen();
 			mx = (mouse.x - offset.x);
 			my = (mouse.y - offset.y);
+		}
+		for (int i = 0; i < keys.length; i++) {
+			if (keys[i] == true) {
+				System.out.print(i);
+			}
 		}
 	}
 
@@ -48,6 +56,7 @@ class Set extends JPanel implements KeyListener, ActionListener, MouseListener {
 	public void keyPressed(KeyEvent ke) {
 		int key = ke.getKeyCode();
 		keys[key] = true;
+
 	}
 
 	@Override
@@ -56,7 +65,12 @@ class Set extends JPanel implements KeyListener, ActionListener, MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-
+		if (b[14].hover(mx, my)) {
+			Upload f = new Upload();
+		}
+		if (b[0].hover(mx, my)) {
+			p.start(true);
+		}
 	}
 
 	@Override
@@ -70,19 +84,12 @@ class Set extends JPanel implements KeyListener, ActionListener, MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-	
-			if (b[14].hover(mx, my)) {
-Upload f= new Upload();
-			}
-			if(b[0].hover(mx,my)){
-				Brush p= new Brush(mx, my);
-			}
-		
-
+		p.active(true);
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		p.active(false);
 	}
 
 	@Override
@@ -115,7 +122,7 @@ Upload f= new Upload();
 				g.setColor(new Color(90, 113, 137));
 				b[i].draw(g);
 			}
-
 		}
+		p.draw(g, mx, my);
 	}
 }
