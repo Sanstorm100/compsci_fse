@@ -34,11 +34,17 @@ public class Brush extends JFrame {
         }
     }
 
-    public void draw(Graphics g, int x1, int y1) {
+    public void draw(Graphics g, int x1, int y1) throws AWTException {
         int mx = x1 - 300;
         int my = y1 - 100;
         Graphics g2 = img.getGraphics();
         g2.setColor(Color.black);
+
+        Robot robot = new Robot();
+
+        Point mouse = MouseInfo.getPointerInfo().getLocation();
+        Color mColour = robot.getPixelColor((int) mouse.getX(), (int) mouse.getY());
+        g2.setColor(mColour);
 
         if (start) {
             if (active) {

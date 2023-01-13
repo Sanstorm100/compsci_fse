@@ -123,6 +123,11 @@ class Set extends JPanel implements KeyListener, ActionListener, MouseListener {
 				b[i].draw(g);
 			}
 		}
-		p.draw(g, mx, my);
+		try {
+			p.draw(g, mx, my);
+		} catch (AWTException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
