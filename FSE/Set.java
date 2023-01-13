@@ -10,7 +10,6 @@ class Set extends JPanel implements KeyListener, ActionListener, MouseListener {
 	Button[] b = new Button[20];
 
 	Brush p;
-
 	public Set() {
 		keys = new boolean[KeyEvent.KEY_LAST + 1];
 		setPreferredSize(new Dimension(1900, 1080));
@@ -70,7 +69,14 @@ class Set extends JPanel implements KeyListener, ActionListener, MouseListener {
 		}
 		if (b[0].hover(mx, my)) {
 			p.start(true);
+				}
+		if (b[3].hover(mx, my)) {
+			p.erase();
+		
 		}
+		
+		p.pickColor();
+	
 	}
 
 	@Override
@@ -99,6 +105,8 @@ class Set extends JPanel implements KeyListener, ActionListener, MouseListener {
 		BasicStroke thickPen = new BasicStroke(3);
 
 		g.drawImage(pic, 0, 0, null);
+		g.drawImage(new ImageIcon("colour wheel.png").getImage(), 1300, 710, null);
+
 		g.setColor(Color.WHITE);
 		g.fillRect(300, 100, 920, 600);
 		g.fillRect(30, 100, 200, 600);
@@ -123,11 +131,8 @@ class Set extends JPanel implements KeyListener, ActionListener, MouseListener {
 				b[i].draw(g);
 			}
 		}
-		try {
+		
 			p.draw(g, mx, my);
-		} catch (AWTException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	
 	}
 }
