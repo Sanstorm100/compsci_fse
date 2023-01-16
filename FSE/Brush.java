@@ -8,20 +8,24 @@ public class Brush extends JFrame {
     private int x, y;
     private boolean active, start;
     private BufferedImage img;
-    Color color= new Color(0,0,0);;
-    Graphics g2 ;
+    Color color = new Color(0, 0, 0);;
+    Graphics g2;
 
     public Brush(int mx, int my) {
         x = mx - 300;
         y = my - 100;
         img = new BufferedImage(920, 600, BufferedImage.TYPE_INT_ARGB);
         size = 20;
-    
+
     }
 
-    public boolean active(boolean t) {
+    public void  active(boolean t) {
         active = t;
-        return t;
+       
+    }
+    
+    public boolean active() {
+        return active;
     }
 
     public void start(boolean t) {
@@ -36,37 +40,42 @@ public class Brush extends JFrame {
             size += 5;
         }
     }
-public void pickColor(){
-    Rectangle rect= new Rectangle( 1300, 710,200,290);
+    public void blur(){
+        
+    }
 
-    if(GTools.intersect( MouseInfo.getPointerInfo().getLocation(), rect)){
-    try{
-    Robot robot = new Robot();
+    public void pickColor() {
+        Rectangle rect = new Rectangle(1300, 710, 200, 290);
 
-    Point mouse = MouseInfo.getPointerInfo().getLocation();
-    
-     color = robot.getPixelColor((int) mouse.getX(), (int) mouse.getY());
+        if (GTools.intersect(MouseInfo.getPointerInfo().getLocation(), rect)) {
+            try {
+                Robot robot = new Robot();
+
+                Point mouse = MouseInfo.getPointerInfo().getLocation();
+
+                color = robot.getPixelColor((int) mouse.getX(), (int) mouse.getY());
+
+            } catch (AWTException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
- catch (AWTException e) {
-    e.printStackTrace();
-}
+
+    public void pickColor(Color c) {
+        color = c;
     }
-    
-}
 
+    public BufferedImage getpic() {
+        return img;
+    }
 
-public void erase(){
-    color= new Color(255,255,255);
-}
-
-
-    public void draw(Graphics g, int x1, int y1)  {
+    public void draw(Graphics g, int x1, int y1, BufferedImage pic) {
+        img = pic;
         int mx = x1 - 300;
         int my = y1 - 100;
         g2 = img.getGraphics();
         g2.setColor(color);
-
 
         if (start) {
             if (active) {

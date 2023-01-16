@@ -1,15 +1,19 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.awt.image.BufferedImage;
 
 class Set extends JPanel implements KeyListener, ActionListener, MouseListener {
 	private boolean[] keys;
 	Timer timer;
-	Image pic;
+	java.awt.Image pic;
 	private int mx, my;
 	Button[] b = new Button[20];
 
 	Brush p;
+	Brush er;
+	BufferedImage img;
+
 	public Set() {
 		keys = new boolean[KeyEvent.KEY_LAST + 1];
 		setPreferredSize(new Dimension(1900, 1080));
@@ -27,6 +31,8 @@ class Set extends JPanel implements KeyListener, ActionListener, MouseListener {
 
 		}
 		p = new Brush(mx, my);
+		er = new Brush(mx, my);
+		er.pickColor(Color.white);
 	}
 
 	@Override
@@ -69,14 +75,16 @@ class Set extends JPanel implements KeyListener, ActionListener, MouseListener {
 		}
 		if (b[0].hover(mx, my)) {
 			p.start(true);
-				}
-		if (b[3].hover(mx, my)) {
-			p.erase();
-		
+			er.start(false);
 		}
+		if (b[3].hover(mx, my)) {
+			er.start(true);
+			p.start(false);
+
+		}
+			p.pickColor();
 		
-		p.pickColor();
-	
+
 	}
 
 	@Override
@@ -91,11 +99,15 @@ class Set extends JPanel implements KeyListener, ActionListener, MouseListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		p.active(true);
+		er.active(true);
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		p.active(false);
+		er.active(false);
+
 	}
 
 	@Override
@@ -131,8 +143,10 @@ class Set extends JPanel implements KeyListener, ActionListener, MouseListener {
 				b[i].draw(g);
 			}
 		}
-		
-			p.draw(g, mx, my);
-	
+		img = p.getpic();
+		img = er.getpic();
+		er.draw(g, mx, my, img);
+		p.draw(g, mx, my, img);
+
 	}
 }
