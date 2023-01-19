@@ -5,7 +5,7 @@ import java.awt.image.*;
 
 
 public class Brush extends JFrame {
-    final int UP = 0, DOWN = 1;
+    final static int UP = 0, DOWN = 1, SHARP=0 ,BLUR=1;
     int size;
     private int x, y;
     private boolean active, start;
@@ -42,11 +42,21 @@ public class Brush extends JFrame {
             size += 5;
         }
     }
-    public BufferedImage  blur(BufferedImage bufferedImage){
-    Kernel kernel = new Kernel(3, 3, new float[] { 1f / 19f, 1f / 19f, 1f / 19f,
-        1f / 19f, 1f / 19f, 1f / 19f, 1f / 19f, 1f / 19f, 1f / 9f });
+    public BufferedImage  blur(BufferedImage bufferedImage, int i){
+        if(i==1){
+        
+    Kernel kernel = new Kernel(3, 3, new float[] { 1f / 9f, 1f / 9f, 1f / 9f,
+        1f / 9f, 1f / 9f, 1f / 9f, 1f / 9f, 1f / 9f, 1f / 9f });
     BufferedImageOp op = new ConvolveOp(kernel);
     return bufferedImage = op.filter(bufferedImage, null);
+        }
+        else{
+            Kernel kernel = new Kernel(3, 3, new float[] {  0,  -1,  0,
+                 -1,  5, -1, 0,  -1,  0 });
+            BufferedImageOp op = new ConvolveOp(kernel);
+            return bufferedImage = op.filter(bufferedImage, null);
+        }
+
         
     }
 

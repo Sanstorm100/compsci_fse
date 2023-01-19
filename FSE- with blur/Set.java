@@ -9,10 +9,12 @@ class Set extends JPanel implements KeyListener, ActionListener, MouseListener {
 	java.awt.Image pic;
 	private int mx, my;
 	Button[] b = new Button[20];
-boolean blur =false;
+	boolean blur =false ,shar = false;
 	Brush p;
 	Brush er;
 	Brush bl;
+	Brush sh;
+
 	BufferedImage img;
 
 	public Set() {
@@ -33,7 +35,9 @@ boolean blur =false;
 		}
 		p = new Brush(mx, my);
 		er = new Brush(mx, my);
-		bl= new Brush(mx, my);
+		bl = new Brush(mx, my);
+		sh = new Brush(mx, my);
+
 		er.pickColor(Color.white);
 	}
 
@@ -78,17 +82,34 @@ boolean blur =false;
 		if (b[0].hover(mx, my)) {
 			p.start(true);
 			er.start(false);
+			bl.start(false);
+
 		}
 		if (b[3].hover(mx, my)) {
 			er.start(true);
 			p.start(false);
+			bl.start(false);
 
 		}
 		if (b[2].hover(mx, my)) {
-	bl.blur(img);
+			bl.start(true);
+			er.start(false);
+			p.start(false);
+		}
+		if (b[4].hover(mx, my)) {
+			sh.start(true);
+			bl.start(false);
+			er.start(false);
+			p.start(false);
+		}
+		for(int i=0;i<2;i++){
+		bl.active(true);
+		}
+		for(int i=0;i<2;i++){
+			sh.active(true);
 			}
-			p.pickColor();
 		
+		p.pickColor();
 
 	}
 
@@ -106,12 +127,16 @@ boolean blur =false;
 		p.active(true);
 		er.active(true);
 
+		
+		
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		p.active(false);
 		er.active(false);
+
 
 	}
 
@@ -148,12 +173,17 @@ boolean blur =false;
 				b[i].draw(g);
 			}
 		}
-	
+
 		img = p.getpic();
 		img = er.getpic();
-		if(blur){
-			img=p.blur(img);
-		}
+		if(bl.active())
+{		img = bl.blur(img,Brush.BLUR);
+	bl.active(false);
+}
+if(sh.active())
+{		img = sh.blur(img,Brush.SHARP);
+	sh.active(false);
+}
 		er.draw(g, mx, my, img);
 		p.draw(g, mx, my, img);
 
