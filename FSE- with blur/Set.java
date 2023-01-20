@@ -5,15 +5,19 @@ import java.awt.image.BufferedImage;
 
 class Set extends JPanel implements KeyListener, ActionListener, MouseListener {
 	private boolean[] keys;
+	private final int INTRO = 0, HOWTOUSE = 1, CREATE = 2;
 	Timer timer;
 	java.awt.Image pic;
-	private int mx, my;
+	private int mx, my,screen;
 	Button[] b = new Button[20];
-	boolean blur =false ,shar = false;
+	boolean clear = false;
+	Button introButton;
+	Button backButton;
 	Brush p;
 	Brush er;
 	Brush bl;
 	Brush sh;
+	Brush inv;
 
 	BufferedImage img;
 
@@ -27,6 +31,9 @@ class Set extends JPanel implements KeyListener, ActionListener, MouseListener {
 		timer = new Timer(20, this);
 		timer.start();
 		pic = new ImageIcon("back.png").getImage();
+		introButton = new Button(610, 230, "idk", 690, 690);
+		backButton = new Button(10, 10, "idk", 75, 75);
+
 		for (int i = 0; i < 5; i++) {
 			b[i] = new Button(40, 130 + (i * 110), "idk", 100, 180);
 			b[i + 5] = new Button(1300, 130 + (i * 110), "idk", 100, 180);
@@ -37,6 +44,7 @@ class Set extends JPanel implements KeyListener, ActionListener, MouseListener {
 		er = new Brush(mx, my);
 		bl = new Brush(mx, my);
 		sh = new Brush(mx, my);
+		inv = new Brush(mx, my);
 
 		er.pickColor(Color.white);
 	}
@@ -82,13 +90,15 @@ class Set extends JPanel implements KeyListener, ActionListener, MouseListener {
 		if (b[0].hover(mx, my)) {
 			p.start(true);
 			er.start(false);
-			bl.start(false);
 
+		}
+		if (b[1].hover(mx, my)) {
+			p.start(true);
+			p.clear();
 		}
 		if (b[3].hover(mx, my)) {
 			er.start(true);
 			p.start(false);
-			bl.start(false);
 
 		}
 		if (b[2].hover(mx, my)) {
@@ -98,17 +108,24 @@ class Set extends JPanel implements KeyListener, ActionListener, MouseListener {
 		}
 		if (b[4].hover(mx, my)) {
 			sh.start(true);
-			bl.start(false);
 			er.start(false);
 			p.start(false);
 		}
-		for(int i=0;i<2;i++){
-		bl.active(true);
+		if (b[5].hover(mx, my)) {
+			inv.start(true);
+			er.start(false);
+			p.start(false);
 		}
-		for(int i=0;i<2;i++){
-			sh.active(true);
-			}
-		
+		if (b[9].hover(mx, my)) {
+			screen = HOWTOUSE;
+		}
+		if (introButton.hover(mx, my)) {
+			screen = CREATE;
+		}
+		if (backButton.hover(mx, my)) {
+			screen = CREATE;
+		}
+
 		p.pickColor();
 
 	}
@@ -124,24 +141,50 @@ class Set extends JPanel implements KeyListener, ActionListener, MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+
+		bl.active(true);
+		sh.active(true);
+		inv.active(true);
 		p.active(true);
 		er.active(true);
-
-		
-		
 
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+
+		bl.start(false);
+		sh.start(false);
+		inv.start(false);
 		p.active(false);
 		er.active(false);
-
 
 	}
 
 	@Override
 	public void paint(Graphics g) {
+		if (screen == INTRO) {
+			Graphics2D g2d = (Graphics2D) g;
+			g.setColor(new Color(48, 150, 220));
+			g.fillRect(0, 0, 1900, 1080);
+			g.setColor(new Color(0, 0, 0));
+			g.setFont(new Font("Palace Script MT", Font.ITALIC, 200));
+			g.drawString("La Boutique", 500, 120);
+			g.drawImage(new ImageIcon("effiel tower resize.png").getImage(), 10, 200, null);
+			g.drawImage(new ImageIcon("arc resize.png").getImage(), 1110, 350, null);
+			g.drawImage(new ImageIcon("beret_250.png").getImage(), 40, 150, null);
+			g.drawImage(new ImageIcon("Logo_690.png").getImage(), 500, 200, null);
+		}
+		if (screen == HOWTOUSE) {
+			g.setColor(Color.white);
+			g.fillRect(0, 0, 1900, 1080);
+			g.setColor(new Color(12, 32, 34));
+			g.setFont(new Font("New Times Roman", Font.CENTER_BASELINE, 40));
+			g.drawString("How To Use La Boutique", 600, 70);
+			g.drawString("use arrow keys to change the thickness of the brushes and erasers", 25, 700);
+			g.drawImage(new ImageIcon("backButton_75.png").getImage(), 10, 10, null);
+		}
+		if (screen == CREATE) {
 		Graphics2D g2d = (Graphics2D) g;
 
 		BasicStroke thickPen = new BasicStroke(3);
@@ -176,16 +219,21 @@ class Set extends JPanel implements KeyListener, ActionListener, MouseListener {
 
 		img = p.getpic();
 		img = er.getpic();
-		if(bl.active())
-{		img = bl.blur(img,Brush.BLUR);
-	bl.active(false);
-}
-if(sh.active())
-{		img = sh.blur(img,Brush.SHARP);
-	sh.active(false);
-}
+		if (bl.active()) {
+			img = bl.blur(img, Brush.BLUR);
+			bl.active(false);
+		}
+		if (sh.active()) {
+			img = sh.blur(img, Brush.SHARP);
+			sh.active(false);
+		}
+		if (inv.active()) {
+			img = inv.blur(img, Brush.INVERT);
+			inv.active(false);
+		}
 		er.draw(g, mx, my, img);
 		p.draw(g, mx, my, img);
 
 	}
+}
 }

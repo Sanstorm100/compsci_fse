@@ -1,6 +1,5 @@
 
 import java.awt.Image;
-import java.awt.*;
 import javax.swing.*;
 
 class Game extends JFrame {

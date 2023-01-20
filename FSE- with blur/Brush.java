@@ -3,15 +3,15 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.*;
 
-
 public class Brush extends JFrame {
-    final static int UP = 0, DOWN = 1, SHARP=0 ,BLUR=1;
+    final static int UP = 0, DOWN = 1, SHARP = 0, BLUR = 1, INVERT = 2;
     int size;
     private int x, y;
-    private boolean active, start;
+    private boolean active, start,clear;
     private BufferedImage img;
-    Color color = new Color(0, 0, 0);;
-    Graphics g2;
+   private  Color color = new Color(0, 0, 0);;
+    private Graphics g2;
+    
 
     public Brush(int mx, int my) {
         x = mx - 300;
@@ -21,11 +21,11 @@ public class Brush extends JFrame {
 
     }
 
-    public void  active(boolean t) {
+    public void active(boolean t) {
         active = t;
-       
+
     }
-    
+
     public boolean active() {
         return active;
     }
@@ -35,6 +35,7 @@ public class Brush extends JFrame {
     }
 
     public void brushSize(int l) {
+
         if (size != 0 && l == 1) {
 
             size -= 5;
@@ -42,22 +43,42 @@ public class Brush extends JFrame {
             size += 5;
         }
     }
-    public BufferedImage  blur(BufferedImage bufferedImage, int i){
-        if(i==1){
-        
-    Kernel kernel = new Kernel(3, 3, new float[] { 1f / 9f, 1f / 9f, 1f / 9f,
-        1f / 9f, 1f / 9f, 1f / 9f, 1f / 9f, 1f / 9f, 1f / 9f });
-    BufferedImageOp op = new ConvolveOp(kernel);
-    return bufferedImage = op.filter(bufferedImage, null);
-        }
-        else{
-            Kernel kernel = new Kernel(3, 3, new float[] {  0,  -1,  0,
-                 -1,  5, -1, 0,  -1,  0 });
-            BufferedImageOp op = new ConvolveOp(kernel);
-            return bufferedImage = op.filter(bufferedImage, null);
-        }
+    public void clear(){
+        clear=true;
 
-        
+    }
+
+    public BufferedImage blur(BufferedImage bufferedImage, int i) {
+        if (start) {
+            if (active) {
+                if (i == 1) {
+
+                    Kernel kernel = new Kernel(3, 3, new float[] { 1f / 9f, 1f / 9f, 1f / 9f,
+                            1f / 9f, 1f / 9f, 1f / 9f, 1f / 9f, 1f / 9f, 1f / 9f });
+                    BufferedImageOp op = new ConvolveOp(kernel);
+                    return bufferedImage = op.filter(bufferedImage, null);
+                }
+                if (i == 0) {
+                    Kernel kernel = new Kernel(3, 3, new float[] { 0, -1, 0,
+                            -1, 5, -1, 0, -1, 0 });
+                    BufferedImageOp op = new ConvolveOp(kernel);
+                    return bufferedImage = op.filter(bufferedImage, null);
+                }
+                if (i == 2) {
+                    Kernel kernel = new Kernel(3, 3, new float[] { 1,0, 0,
+                            0,1, 0, 0, 0, 1 });
+                    BufferedImageOp op = new ConvolveOp(kernel);
+                    return bufferedImage = op.filter(bufferedImage, null);
+                } else {
+                    Kernel kernel = new Kernel(3, 3, new float[] { 0, -1, 0,
+                            -1, 5, -1, 0, -1, 0 });
+                    BufferedImageOp op = new ConvolveOp(kernel);
+                    return bufferedImage = op.filter(bufferedImage, null);
+                }
+            }
+        }
+        return bufferedImage;
+
     }
 
     public void pickColor() {
@@ -103,9 +124,16 @@ public class Brush extends JFrame {
                 g2.fillOval(mx, my, size, size);
             }
         }
+        if(clear){
+            g2.setColor(Color.white);
+            g2.drawRect(0, 0, 920, 600);
+            g2.fillRect(0, 0, 920, 600);
+            clear=false;  
+        }
         g.drawImage(img, 300, 100, null);
         x = mx;
         y = my;
     }
+ 
 
 }
